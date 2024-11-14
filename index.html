@@ -3,46 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - View Messages</title>
+    <title>NEET Admission & Counselling Services</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
 </head>
 <body>
-    <h1>Admin - View Messages</h1>
-    <div id="messages"></div>
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID",
-            databaseURL: "YOUR_DATABASE_URL"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const auth = firebase.auth();
+<header>
+    <h1>NEET Admission & Counselling Services</h1>
+    <p>Welcome! I'm Aditya Verma from GMC Buldhana, 2024 batch.</p>
+</header>
 
-        auth.signInWithEmailAndPassword("YOUR_ADMIN_EMAIL", "YOUR_ADMIN_PASSWORD")
-            .then(() => {
-                database.ref("messages").on("value", (snapshot) => {
-                    const messagesDiv = document.getElementById("messages");
-                    messagesDiv.innerHTML = ""; // Clear existing messages
-                    snapshot.forEach((childSnapshot) => {
-                        const message = childSnapshot.val().message;
-                        const messageDiv = document.createElement("div");
-                        messageDiv.textContent = message;
-                        messagesDiv.appendChild(messageDiv);
-                    });
-                });
-            })
-            .catch((error) => {
-                console.error("Authentication failed:", error);
-                alert("Access denied. Admin only.");
-            });
-    </script>
+<section class="services">
+    <h2>Our Services</h2>
+    <p>We offer affordable counseling for NEET admissions. Choose the option that best fits your needs.</p>
+
+    <div class="card">
+        <h3>State Quota Counselling</h3>
+        <p>Price: 200 INR</p>
+    </div>
+
+    <div class="card">
+        <h3>All India Counselling</h3>
+        <p>Price: 200 INR</p>
+    </div>
+
+    <div class="card">
+        <h3>Both Counselling Services</h3>
+        <p>Price: 300 INR</p>
+    </div>
+</section>
+
+<section class="contact">
+    <p><strong>For inquiries, contact me at: adityaverma2141@gmail.com</strong></p>
+</section>
+
+<section class="message-form">
+    <h2>Leave a Message</h2>
+    <form id="messageForm">
+        <textarea id="messageText" placeholder="Write your message here..." required></textarea><br>
+        <button type="submit">Submit</button>
+    </form>
+</section>
+
+<script>
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID",
+        databaseURL: "YOUR_DATABASE_URL"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // Handle message form submission
+    document.getElementById("messageForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const messageText = document.getElementById("messageText").value;
+
+        // Save message to Firebase Database
+        database.ref("messages").push({
+            message: messageText,
+            timestamp: Date.now()
+        });
+
+        alert("Message sent successfully!");
+        document.getElementById("messageForm").reset();
+    });
+</script>
+
 </body>
 </html>
