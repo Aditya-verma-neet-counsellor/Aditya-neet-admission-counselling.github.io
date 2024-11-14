@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - View Messages</title>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+</head>
+<body>
+    <h1>Admin - View Messages</h1>
+    <div id="messages"></div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID",
+            databaseURL: "YOUR_DATABASE_URL"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const auth = firebase.auth();
+
+        auth.signInWithEmailAndPassword("YOUR_ADMIN_EMAIL", "YOUR_ADMIN_PASSWORD")
+            .then(() => {
+                database.ref("messages").on("value", (snapshot) => {
+                    const messagesDiv = document.getElementById("messages");
+                    messagesDiv.innerHTML = ""; // Clear existing messages
+                    snapshot.forEach((childSnapshot) => {
+                        const message = childSnapshot.val().message;
+                        const messageDiv = document.createElement("div");
+                        messageDiv.textContent = message;
+                        messagesDiv.appendChild(messageDiv);
+                    });
+                });
+            })
+            .catch((error) => {
+                console.error("Authentication failed:", error);
+                alert("Access denied. Admin only.");
+            });
+    </script>
+</body>
+</html>
